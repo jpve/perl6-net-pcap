@@ -8,6 +8,13 @@ The modules are annotated with Pod. These Pods are rendered to [docs/](/docs).
 
 ## Installation
 
+Using panda:
+```
+$ panda update
+$ panda install Net::Pcap
+```
+
+Using ufo:
 ```
 $ ufo           # Generates Makefile
 $ make
