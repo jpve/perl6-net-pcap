@@ -139,12 +139,23 @@ has Bool $.is_freed is rw = False;
 
 =begin code
 .new(OpaquePointer $ptr, Int $elems, Bool $is_owner = True) returns C_Buf
-  C_Buf constructor
+.new(Buf $buf) returns C_Buf
+  C_Buf constructor.
 =end code
 
-method new(OpaquePointer $ptr, Int $elems, Bool $is_owner = True) returns C_Buf {
+multi method new(OpaquePointer $ptr, Int $elems, Bool $is_owner = True) returns C_Buf {
     my $carray = nativecast(uint8p, $ptr);
     self.bless(:$ptr, :$carray, :$elems, :$is_owner, :is_freed(False));
+}
+
+multi method new(Buf $buf) {
+    my $elems = $buf.elems;
+    my $ptr = C_malloc($elems);
+    my $carray = nativecast(uint8p, $ptr);
+    for 0..^$elems -> $i {
+	$carray[$i] = $buf[$i];
+    }
+    self.bless(:$ptr, :$carray, :$elems, :is_owner(True), :is_freed(False));
 }
 
 

@@ -1,5 +1,6 @@
 use NativeCall;
 use Net::Pcap::C_Buf :short;
+use Net::Pcap::Linktype :short;
 
 =NAME
 Net::Pcap - libpcap bindings
@@ -44,21 +45,22 @@ loop $pcap.next_ex -> ($hdr, $frame) {
 =end DESCRIPTION
 
 
-class Net::Pcap is repr('CPointer');
     
-my constant Pcap is export(:short) ::= Net::Pcap;
-
-
-
 =head2 class Net::Pcap::pcap_pkthdr_t
 
 =begin code
 is repr('CStruct')
+
+Implements `pcap_pkthdr_t`.
 =end code
 
+class Net::Pcap is repr('CPointer');
 
-# Structs
-my class pcap_pkthdr_t is repr('CStruct') {
+my constant Pcap is export(:short) ::= Net::Pcap;
+
+
+
+class pcap_pkthdr_t is repr('CStruct') {
 =head3 Attributes
 
 =begin code
@@ -106,7 +108,11 @@ $.len      is int
     }
 }
 
-my class pcap_pkthdrp_t is repr('CStruct') {
+
+
+# Structs
+
+class pcap_pkthdrp_t is repr('CStruct') {
     has pcap_pkthdr_t $.hdr; # **pcap_pkthdr_t
 }
 
@@ -137,6 +143,8 @@ my class pcap_ifp_t is repr('CStruct') {
 	
 =begin code
 is repr('CPointer')
+
+Implements `pcap_t`.
 =end code
 
 
@@ -150,6 +158,9 @@ my sub pcap_create(Str $source, OpaquePointer $errbuf)
     is native('libpcap') { * };
 my sub pcap_activate(Pcap $p)
     returns int
+    is native('libpcap') { * };
+my sub pcap_open_dead(int $linktype, int $snaplen)
+    returns Pcap
     is native('libpcap') { * };
 my sub pcap_close(Pcap $p)
     is native('libpcap') { * };
@@ -216,6 +227,21 @@ method open_offline(Str $fname) returns Pcap{
     # TODO: Do I have to call free on $errbuf explicitly or does the GC call its DESTROY()?
     $r;
 };
+
+
+
+=begin code
+.open_dead(Int $linktype, Int $snaplen) returns Net::Pcap
+  Constructor for creating a fake Net::Pcap.
+=end code
+
+method open_dead(Int $linktype, Int $snaplen) returns Pcap {
+    my $r = pcap_open_dead($linktype, $snaplen);
+    if !$r {
+	die("Pcap->open_dead: Cannot open dead pcap");
+    }
+    $r;
+}
 
 
 
