@@ -86,7 +86,8 @@ class Net::Pcap::C_Buf
 ### Methods
 
     .new(OpaquePointer $ptr, Int $elems, Bool $is_owner = True) returns C_Buf
-      C_Buf constructor
+    .new(Buf $buf) returns C_Buf
+      C_Buf constructor.
 
     .free()
       Free the buffer

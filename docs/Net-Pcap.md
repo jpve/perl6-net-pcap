@@ -50,6 +50,8 @@ class Net::Pcap::pcap_pkthdr_t
 
     is repr('CStruct')
 
+    Implements `pcap_pkthdr_t`.
+
 ### Attributes
 
     $.tv_sec   is int
@@ -70,6 +72,8 @@ class Net::Pcap
 
     is repr('CPointer')
 
+    Implements `pcap_t`.
+
 ### Methods
 
     .create(Str $source="any") returns Net::Pcap
@@ -77,6 +81,9 @@ class Net::Pcap
 
     .open_offline(Str $fname) returns Net::Pcap
       Constructor for Net::Pcap to open capture files, uses pcap_open_offline().
+
+    .open_dead(Int $linktype, Int $snaplen) returns Net::Pcap
+      Constructor for creating a fake Net::Pcap.
 
     .close()
       Calls pcap_close().
