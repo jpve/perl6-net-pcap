@@ -102,7 +102,7 @@ my sub C_free(OpaquePointer $ptr) is export(:util)
 does Positional
 =end code
 
-class Net::Pcap::C_Buf does Positional;
+unit class Net::Pcap::C_Buf does Positional;
     
 my constant C_Buf is export(:short) ::= Net::Pcap::C_Buf;
 
