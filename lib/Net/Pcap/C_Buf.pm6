@@ -1,4 +1,5 @@
 use NativeCall;
+use nqp; # TODO: Get this code performant without using nqp! nqp is not portable.
 
 =NAME
 Net::Pcap::C_Buf;
