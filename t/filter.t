@@ -1,8 +1,7 @@
 use v6;
-BEGIN { @*INC.unshift: 'blib/lib', 'lib' }
+use lib <blib/lib lib>;
 
-use Test;
-use Net::Pcap;
+use Test; use Net::Pcap;
 
 plan 1;
 
